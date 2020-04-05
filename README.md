@@ -51,12 +51,39 @@ import './index.scss' // 引入
 
 ```
 
+## 项目配置文件 project.config.js
+```js
+module.exports = {
+  /**
+   * 模版选择： 'hbs', 'handlebars', 'ejs', 'pug', 'jade'
+   */
+  tpl: "hbs",
+  
+  /**
+   * 样式选择： 'css', 'sass', 'less'
+   */
+  css: "sass",
+
+  /**
+   * 通用库，配置通用库，直接不参与打包、而是在head中直接引入相关文件
+   * 具体渲染细节在components下的HeaderLinks，HeaderScripts中
+   */
+  commonLibrary: {
+    /* 通用JS库列表 */
+    js: ["jquery"],
+    /* 通用CSS库列表 */
+    css: ["normalize.css"],
+  },
+  // 查看webpack-dev-server配置
+  devServer: {
+    host: "0.0.0.0",
+    port: 8080,
+    useLocalIp: true,
+  },
+}
+```
+
 ## 特性
-
-基本：
-
-- [x] HMR
-- [x] Babel
 
 模版：
 
@@ -69,35 +96,4 @@ import './index.scss' // 引入
 - [x] SASS
 - [x] LESS
 - [x] PostCSS
-
-静态资源：
-
-- [x]  SVG
-- [x]  Webfonts
-- []  Webp
-
-CSS库集成：
-
-- [x] normalize.css
-- [x] Bootstrap
-- [ ] 其他
-
-JS库集成：
-
-- [x] jQuery
-- [ ] Zepto
-- [ ] 其他
-
-发布支持：
-
-- [ ] Docker
-- [ ] Nginx
-- [ ] CI/CD
-
-其他：
-
-- [x] 改造webpack配置，按需生成配置文件
-- [x] 开发环境API代理
-- [ ] 编写基本辅助CLI
-
 
