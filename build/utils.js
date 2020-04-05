@@ -8,6 +8,22 @@ const createPathResolve = dir => (...args) => path.resolve(__dirname, dir, ...ar
 
 const resolvePagesDir = createPathResolve('../src/pages')
 
+const dirDistStatic = createPathResolve('../dist/static/libs')
+
+const genrateLibsOpts = function (libs = []) {
+  const copyList = []
+  const urlList = []
+  libs.forEach(name => {
+    const pathResolved = require.resolve(name)
+    const pathFrom = pathResolved.replace(/(?=\/dist\/).*/, '/dist')
+    const linkTo = `static/libs/${pathResolved.match(/(?<=node_modules\/).*/, '')[0]}`
+    const pathTo = dirDistStatic(name, 'dist')
+    copyList.push({ from: pathFrom, to: pathTo })
+    urlList.push(linkTo)
+  })
+  return { copyList, urlList }
+}
+
 
 function colectPages() {
   const entryPath = resolvePagesDir()
@@ -19,7 +35,7 @@ function colectPages() {
 
   const entries = pages.map((pageName, idx) => {
     const opt = {
-      name: pageName === '' ? 'root': pageName,
+      name: pageName === '' ? 'root' : pageName,
       tpl: tplFiles[idx],
       js: jsFiles[idx]
     }
@@ -32,9 +48,10 @@ function colectPages() {
 /**
  * 
  * @param {{name:string,tpl:string,js:string}[]} pages 
- * @param {string[]} libChunks
+ * @param {{libChunks: string[], libLinks: string[]}} opts
  */
-function generateHtmls(pages, libChunks = []) {
+function generateHtmls(pages, opts = {}) {
+  const { libChunks = [], libLinks = [] } = opts
   return pages.map(pageOpt => {
     const { name, tpl } = pageOpt
     const filename = name === 'root' ? `index.html` : `${name}/index.html`
@@ -42,9 +59,11 @@ function generateHtmls(pages, libChunks = []) {
       title: true,
       filename,
       template: tpl,
-      libChunks,
+      // libChunks,
+      // libLinks,
       templateParameters: {
-        libChunks
+        libChunks,
+        libLinks,
       },
       chunks: [name, ...libChunks]
     })
@@ -69,5 +88,7 @@ module.exports = {
   colectPages,
   generateHtmls,
   generateEntries,
+  genrateLibsOpts,
+  dirDistStatic,
   isDev
 }

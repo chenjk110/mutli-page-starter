@@ -78,12 +78,13 @@ import './index.scss' // 引入
 
 CSS库集成：
 
-- [ ] Bootstrap
+- [x] normalize.css
+- [x] Bootstrap
 - [ ] 其他
 
 JS库集成：
 
-- [ ] jQuery
+- [x] jQuery
 - [ ] Zepto
 - [ ] 其他
 

@@ -1,0 +1,4 @@
+{{!-- 通用依赖css库，不参与打包，通过注入link方式加载 --}}
+{{#each htmlWebpackPlugin.options.templateParameters.libLinks }}
+  <link rel="stylesheet" href="{{this}}">
+{{/each}}

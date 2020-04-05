@@ -6,19 +6,24 @@ const {
   colectPages,
   generateEntries,
   generateHtmls,
-  createPathResolve,
-  isDev
+  genrateLibsOpts,
+  isDev,
 } = require('./utils')
 
-const dirDistStatic = createPathResolve('../dist/static/libs')
+const libsJS = ['jquery', 'bootstrap']
+const libsCSS = ['normalize.css']
 
-const libs = ['jquery', 'bootstrap']
 
-const libsURLs = libs.map(name => `static/libs/${name}/dist/index.js`)
-const libsCopyOpts = libs.map(name => ({ from: require.resolve(name), to: dirDistStatic(name, 'dist/index.js') }))
+const libsJSOpts = genrateLibsOpts(libsJS)
+const libsCSSOpts = genrateLibsOpts(libsCSS)
+
+const htmlParams = {
+  libChunks: libsJSOpts.urlList,
+  libLinks: libsCSSOpts.urlList,
+}
 
 const pages = colectPages()
-const htmlPagePlugins = generateHtmls(pages, libsURLs)
+const htmlPagePlugins = generateHtmls(pages, htmlParams)
 const pageEntries = generateEntries(pages)
 
 module.exports = merge({
@@ -27,6 +32,7 @@ module.exports = merge({
     ...pageEntries,
   },
   externals: {
+    jquery: 'jquery',
     jQuery: 'jquery',
     $: 'jquery'
   },
@@ -107,7 +113,8 @@ module.exports = merge({
   plugins: [
     ...htmlPagePlugins,
     new CopyPlugin([
-      ...libsCopyOpts
+      ...libsJSOpts.copyList,
+      ...libsCSSOpts.copyList,
     ]),
     new ProvidePlugin({
       $: 'jquery',
