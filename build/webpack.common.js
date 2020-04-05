@@ -1,19 +1,35 @@
 const merge = require('webpack-merge')
+const CopyPlugin = require('copy-webpack-plugin')
+const { ProvidePlugin } = require('webpack')
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 const {
   colectPages,
   generateEntries,
   generateHtmls,
+  createPathResolve,
   isDev
 } = require('./utils')
 
+const dirDistStatic = createPathResolve('../dist/static/libs')
+
+const libs = ['jquery', 'bootstrap']
+
+const libsURLs = libs.map(name => `static/libs/${name}/dist/index.js`)
+const libsCopyOpts = libs.map(name => ({ from: require.resolve(name), to: dirDistStatic(name, 'dist/index.js') }))
+
 const pages = colectPages()
-const htmlPagePlugins = generateHtmls(pages)
+const htmlPagePlugins = generateHtmls(pages, libsURLs)
 const pageEntries = generateEntries(pages)
 
 module.exports = merge({
   mode: 'none',
-  entry: pageEntries,
+  entry: {
+    ...pageEntries,
+  },
+  externals: {
+    jQuery: 'jquery',
+    $: 'jquery'
+  },
   module: {
     rules: [
       {
@@ -90,5 +106,14 @@ module.exports = merge({
   },
   plugins: [
     ...htmlPagePlugins,
+    new CopyPlugin([
+      ...libsCopyOpts
+    ]),
+    new ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      'window.$': 'jquery',
+    })
   ]
 })

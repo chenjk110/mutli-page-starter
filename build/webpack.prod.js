@@ -5,20 +5,29 @@ const { createPathResolve } = require('./utils')
 
 const common = require('./webpack.common')
 
-const pathDist = createPathResolve('../dist')()
+const dirDist = createPathResolve('../dist')()
 
 module.exports = merge(common, {
   mode: 'production',
   devtool: 'cheap-module-source-map',
   output: {
-    path: pathDist,
+    path: dirDist,
     filename(chunkData) {
       return `static/js/${
         chunkData.chunk.name.replace('/', '.')
         }.[chunkhash:6].js`
     },
-    chunkFilename: '[chunkhash:6].js',
+    chunkFilename: 'static/js/[name].[chunkhash:6].js',
     // publicPath: ''
+  },
+  optimization: {
+    splitChunks: {
+      minChunks: 2,
+      chunks: 'all',
+      maxInitialRequests: 3,
+      maxAsyncRequests: 6,
+      name: 'chunks'
+    }
   },
   plugins: [
     new CleanWebpackPlugin(),

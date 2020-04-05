@@ -32,8 +32,9 @@ function colectPages() {
 /**
  * 
  * @param {{name:string,tpl:string,js:string}[]} pages 
+ * @param {string[]} libChunks
  */
-function generateHtmls(pages) {
+function generateHtmls(pages, libChunks = []) {
   return pages.map(pageOpt => {
     const { name, tpl } = pageOpt
     const filename = name === 'root' ? `index.html` : `${name}/index.html`
@@ -41,7 +42,11 @@ function generateHtmls(pages) {
       title: true,
       filename,
       template: tpl,
-      chunks: [name]
+      libChunks,
+      templateParameters: {
+        libChunks
+      },
+      chunks: [name, ...libChunks]
     })
   })
 }
@@ -57,6 +62,7 @@ function generateEntries(pages) {
     return entries
   }, {})
 }
+
 
 module.exports = {
   createPathResolve,
