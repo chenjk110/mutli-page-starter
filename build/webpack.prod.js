@@ -9,6 +9,7 @@ const pathDist = createPathResolve('../dist')()
 
 module.exports = merge(common, {
   mode: 'production',
+  devtool: 'cheap-module-source-map',
   output: {
     path: pathDist,
     filename(chunkData) {

@@ -56,7 +56,7 @@ import './index.scss' // 引入
 基本：
 
 - [x] HMR
-- [ ] Babel
+- [x] Babel
 
 模版：
 
@@ -67,8 +67,8 @@ import './index.scss' // 引入
 样式:
 
 - [x] SASS
-- [ ] LESS
-- [ ] PostCSS
+- [x] LESS
+- [x] PostCSS
 
 静态资源：
 

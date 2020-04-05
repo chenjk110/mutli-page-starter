@@ -17,6 +17,18 @@ module.exports = merge({
   module: {
     rules: [
       {
+        test: /\.js/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env']
+            }
+          }
+        ]
+      },
+      {
         test: /\.(ttf|eot|woff2?)(\?v=\d+\.\d+\.\d+)?$/i,
         use: [
           {
@@ -43,12 +55,34 @@ module.exports = merge({
         use: 'handlebars-loader',
       },
       {
-        test: /\.(css|s(a|c)ss)$/i,
+        test: /\.css$/,
         use: [
           isDev
             ? 'style-loader'
             : { loader: MiniCSSExtractPlugin.loader },
           'css-loader',
+          'postcss-loader',
+        ]
+      },
+      {
+        test: /\.less$/i,
+        use: [
+          isDev
+            ? 'style-loader'
+            : { loader: MiniCSSExtractPlugin.loader },
+          'css-loader',
+          'postcss-loader',
+          'less-loader'
+        ]
+      },
+      {
+        test: /\.s(a|c)ss$/i,
+        use: [
+          isDev
+            ? 'style-loader'
+            : { loader: MiniCSSExtractPlugin.loader },
+          'css-loader',
+          'postcss-loader',
           'sass-loader',
         ]
       }
