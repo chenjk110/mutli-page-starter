@@ -10,9 +10,10 @@ const {
   isDev,
 } = require('./utils')
 
-const libsJS = ['jquery', 'bootstrap']
-const libsCSS = ['normalize.css']
+const projectOptions = require('../project.config')
 
+const libsJS = [].concat(projectOptions.commonLibrary.js)
+const libsCSS = [].concat(projectOptions.commonLibrary.css)
 
 const libsJSOpts = genrateLibsOpts(libsJS)
 const libsCSSOpts = genrateLibsOpts(libsCSS)
@@ -22,19 +23,115 @@ const htmlParams = {
   libLinks: libsCSSOpts.urlList,
 }
 
-const pages = colectPages()
+const pages = colectPages(projectOptions.tpl)
 const htmlPagePlugins = generateHtmls(pages, htmlParams)
 const pageEntries = generateEntries(pages)
+
+const tplLoaders = {
+  hbs: {
+    test: /\.(hbs|handlebars)$/i,
+    use: 'handlebars-loader',
+  },
+  ejs: {
+    test: /\.ejs$/i,
+    use: 'ejs-loader'
+  },
+  pug: {
+    test: /\.(pug|jade)$/i,
+    use: 'pug-loader'
+  }
+}
+
+const cssLoaders = {
+  sass: {
+    test: /\.s(a|c)ss$/i,
+    use: [
+      isDev
+        ? 'style-loader'
+        : { loader: MiniCSSExtractPlugin.loader },
+      'css-loader',
+      'postcss-loader',
+      'sass-loader',
+    ]
+  },
+  less: {
+    test: /\.less$/i,
+    use: [
+      isDev
+        ? 'style-loader'
+        : { loader: MiniCSSExtractPlugin.loader },
+      'css-loader',
+      'postcss-loader',
+      'less-loader'
+    ]
+  }
+}
+
+const additions = {
+  jquery: {
+    externals: {
+      jquery: 'jquery',
+      jQuery: 'jquery',
+      $: 'jquery'
+    },
+    plugins: [
+      new ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery',
+        'window.$': 'jquery',
+      })
+    ]
+  }
+}
+
+const customRules = []
+
+switch (projectOptions.tpl) {
+  case 'handlebars':
+  case 'hbs':
+    customRules.push(tplLoaders['hbs'])
+    break
+  case 'jade':
+  case 'pug':
+    customRules.push(tplLoaders['pug'])
+    break
+  case 'ejs':
+    customRules.push(tplLoaders['ejs'])
+    break
+  default:
+    break
+}
+
+switch (projectOptions.css) {
+  case 'less':
+    customRules.push(cssLoaders['less'])
+    break
+  case 'sass':
+    customRules.push(cssLoaders['sass'])
+    break
+  default:
+    break
+}
+
+const customAdditonOptions = []
+
+Object.keys(projectOptions.commonLibrary)
+  .forEach(type => {
+    /** @type {string[]} */
+    const libs = projectOptions.commonLibrary[type]
+
+    libs.forEach(libName => {
+      const opt = additions[libName]
+      opt != null && customAdditonOptions.push(opt)
+    })
+  })
+
 
 module.exports = merge({
   mode: 'none',
   entry: {
     ...pageEntries,
-  },
-  externals: {
-    jquery: 'jquery',
-    jQuery: 'jquery',
-    $: 'jquery'
   },
   module: {
     rules: [
@@ -54,30 +151,32 @@ module.exports = merge({
         test: /\.(ttf|eot|woff2?)(\?v=\d+\.\d+\.\d+)?$/i,
         use: [
           {
-            loader: 'file-loader',
+            loader: 'url-loader',
             options: {
-              filename: 'static/fonts/[name].[ext]?[contenthash:6]',
+              limit: 8192,
+              outputPath: 'static/images',
+              // fallback: 'file-loader',
+              quality: 75
             }
           }
         ]
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
+        test: /\.(png|jpe?g|gif|svg)$/i,
         use: [
           {
-            loader: 'file-loader',
+            loader: 'url-loader',
             options: {
-              filename: 'static/images/[name].[contenhash:6].[ext]',
+              limit: 8192,
+              outputPath: 'static/images',
+              // fallback: 'file-loader',
+              quality: 75
             }
-          },
+          }
         ],
       },
       {
-        test: /\.(hbs|handlebars|html)$/i,
-        use: 'handlebars-loader',
-      },
-      {
-        test: /\.css$/,
+        test: /\.css$/i,
         use: [
           isDev
             ? 'style-loader'
@@ -86,28 +185,7 @@ module.exports = merge({
           'postcss-loader',
         ]
       },
-      {
-        test: /\.less$/i,
-        use: [
-          isDev
-            ? 'style-loader'
-            : { loader: MiniCSSExtractPlugin.loader },
-          'css-loader',
-          'postcss-loader',
-          'less-loader'
-        ]
-      },
-      {
-        test: /\.s(a|c)ss$/i,
-        use: [
-          isDev
-            ? 'style-loader'
-            : { loader: MiniCSSExtractPlugin.loader },
-          'css-loader',
-          'postcss-loader',
-          'sass-loader',
-        ]
-      }
+      ...customRules
     ]
   },
   plugins: [
@@ -116,11 +194,5 @@ module.exports = merge({
       ...libsJSOpts.copyList,
       ...libsCSSOpts.copyList,
     ]),
-    new ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      'window.jQuery': 'jquery',
-      'window.$': 'jquery',
-    })
   ]
-})
+}, ...customAdditonOptions)

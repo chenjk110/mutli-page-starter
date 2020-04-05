@@ -61,8 +61,8 @@ import './index.scss' // 引入
 模版：
 
 - [x] Handlebars
-- [ ] EJS
-- [ ] Jade
+- [x] EJS
+- [x] Pug
 
 样式:
 
@@ -72,9 +72,9 @@ import './index.scss' // 引入
 
 静态资源：
 
-- [ ]  SVG
-- [ ]  Webp
-- [ ]  Webfonts
+- [x]  SVG
+- [x]  Webfonts
+- []  Webp
 
 CSS库集成：
 
@@ -96,8 +96,8 @@ JS库集成：
 
 其他：
 
-- [ ] 改造webpack配置，按需生成配置文件
-- [ ] 开发环境API代理
+- [x] 改造webpack配置，按需生成配置文件
+- [x] 开发环境API代理
 - [ ] 编写基本辅助CLI
 
 

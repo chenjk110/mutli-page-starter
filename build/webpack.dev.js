@@ -1,6 +1,10 @@
-const merge = require('webpack-merge')
 const { HotModuleReplacementPlugin } = require('webpack')
+const merge = require('webpack-merge')
 const common = require('./webpack.common')
+const projectOptions = require('../project.config')
+
+const customDevServerOpts = { devServer: projectOptions.devServer || {} }
+
 module.exports = merge(common, {
   mode: 'development',
   devtool: 'source-map',
@@ -16,4 +20,4 @@ module.exports = merge(common, {
   plugins: [
     new HotModuleReplacementPlugin(),
   ]
-})
+}, customDevServerOpts)

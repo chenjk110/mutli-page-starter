@@ -24,12 +24,11 @@ const genrateLibsOpts = function (libs = []) {
   return { copyList, urlList }
 }
 
-
-function colectPages() {
+function colectPages(ext = '') {
   const entryPath = resolvePagesDir()
 
-  const tplFiles = glob(entryPath + '/**/index.hbs', { sync: true })
-  const jsFiles = glob(entryPath + '/**/index.js', { sync: true })
+  const tplFiles = glob(`${entryPath}/**/index.${ext}`, { sync: true })
+  const jsFiles = glob(`${entryPath}/**/index.js`, { sync: true })
 
   const pages = tplFiles.map(name => name.replace(entryPath + '/', '').replace(/\/?index.*/, ''))
 
