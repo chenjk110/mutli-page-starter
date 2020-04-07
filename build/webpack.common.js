@@ -57,5 +57,14 @@ module.exports = merge({
         ]
       },
     ]
+  },
+  resolve: {
+    alias: {
+      "@": "./src",
+      "@assets": "./src/assets",
+      "@components": "./src/common/components",
+      "@layouts": "./src/common/layouts",
+      "@pages": "./src/pages",
+    }
   }
 })
