@@ -60,7 +60,7 @@ module.exports = {
   tpl: "hbs",
   
   /**
-   * 样式选择： 'css', 'sass', 'less'
+   * 样式选择： 'css', 'sass', 'scss', 'less'
    */
   css: "sass",
 
