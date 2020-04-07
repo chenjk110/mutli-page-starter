@@ -4,7 +4,7 @@
  */
 const options = {
   tpl: "hbs",
-  css: "sass",
+  css: "scss",
   commonLibrary: {
     js: ["jquery"],
     css: ["normalize.css"],
@@ -12,7 +12,7 @@ const options = {
   devServer: {
     host: "0.0.0.0",
     port: 8080,
-    useLocalIp: true,
+    useLocalIp: true
   },
 }
 
@@ -21,7 +21,7 @@ module.exports = options
 /**
  * @typedef ProjectOptions
  * @property {'hbs'|'handlebars'|'html'|'ejs'|'pug'|'jade'} tpl
- * @property {'css'|'sass'|'less'} css
+ * @property {'css'|'sass'|'scss'|'less'} css
  * @property {{js: string[], css: string[]}} commonLibrary
  * @property {import('webpack-dev-server').Configuration} devServer
  */

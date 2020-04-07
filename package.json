@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run dev",
-    "dev": "NODE_ENV=development webpack-dev-server --config build/webpack.dev.js",
-    "build": "NODE_ENV=production webpack --config build/webpack.prod.js"
+    "dev": "NODE_ENV=development node build/run.js",
+    "build": "NODE_ENV=production node build/run.js",
+    "new": "node build/create.js"
   },
   "keywords": [],
   "author": "TanKingKhun",
@@ -31,7 +32,6 @@
     "ejs": "^3.0.2",
     "ejs-loader": "^0.3.6",
     "file-loader": "^6.0.0",
-    "fs-extra": "^9.0.0",
     "glob": "^7.1.6",
     "handlebars": "^4.7.6",
     "handlebars-loader": "^1.7.1",

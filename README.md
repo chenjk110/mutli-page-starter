@@ -83,6 +83,64 @@ module.exports = {
 }
 ```
 
+## 辅助脚本
+```bash
+npm run new [type] [name]
+```
+通过该脚本，可以快捷创建页面(page)、组件(component)、布局(layout), 使用格式：
+```bash
+------------------[格式]----------------------
+创建页面：npm run new page /home/about/me [...]
+创建组件：npm run new comp 组件名称 [...]
+创建布局：npm run new layout 布局名称 [...]
+----------------------------------------------
+```
+
+### 1. 创建页面
+```bash
+# 单页面
+npm run new page /page1/page1_1
+```
+
+```bash
+# 多页面
+npm run new page /page1 /page2 /page3
+```
+
+```bash
+[Page1]：成功创建模版文件 -> index.hbs
+[Page1]: 成功创建样式文件 -> index.scss
+[Page1]: 成功创建脚本文件 -> index.js
+[成功创建页面：/page1]
+
+[Page2]：成功创建模版文件 -> index.hbs
+[Page2]: 成功创建样式文件 -> index.scss
+[Page2]: 成功创建脚本文件 -> index.js
+[成功创建页面：/page2]
+
+[Page3]：成功创建模版文件 -> index.hbs
+[Page3]: 成功创建样式文件 -> index.scss
+[Page3]: 成功创建脚本文件 -> index.js
+[成功创建页面：/page3]
+
+```
+
+### 2. 创建组件
+```bash
+# 单组件
+npm run new comp Header
+```
+
+```bash
+# 多组件组件
+npm run new comp Avatar Button
+```
+
+### 3. 创建布局
+```bash
+npm run new layout Footer
+```
+
 ## 特性
 
 模版：

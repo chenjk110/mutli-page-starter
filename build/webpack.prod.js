@@ -3,11 +3,9 @@ const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { createPathResolve } = require('./utils')
 
-const common = require('./webpack.common')
-
 const dirDist = createPathResolve('../dist')()
 
-module.exports = merge(common, {
+module.exports = merge({
   mode: 'production',
   devtool: 'cheap-module-source-map',
   output: {
