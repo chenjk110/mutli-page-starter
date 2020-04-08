@@ -12,7 +12,7 @@
   "keywords": [],
   "author": "TanKingKhun",
   "repository": {
-    "type": "public",
+    "type": "https",
     "url": "https://github.com/chenjk110/mutli-page-starter.git"
   },
   "maintainers": [
